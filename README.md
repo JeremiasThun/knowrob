@@ -1,8 +1,10 @@
 KnowRob
 =======
 
-[![Build Status](https://travis-ci.org/knowrob/knowrob.svg?branch=master)](https://travis-ci.org/knowrob/knowrob)
+__This is a special fork used by the SUTURO2020 team!__
 
+
+Original README:
 This repository contains
 KnowRob core packages and general issue tracker for the KnowRob knowledge base.
 

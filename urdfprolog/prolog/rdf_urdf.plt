@@ -19,7 +19,7 @@ test(rdf_urdf_load) :-
   atom_concat(X, '/urdf/pr2_for_unit_tests.urdf', FileURL),
   %%
   kb_create(urdf:'Robot', Robot),
-  rdf_urdf_load(Robot, FileURL),
+  rdf_urdf_load_file(Robot, FileURL),
   assertz(testbot(Robot)).
 
 test(robot_name) :-

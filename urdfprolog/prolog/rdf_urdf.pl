@@ -27,7 +27,8 @@
 
 :- module(rdf_urdf,
     [
-    rdf_urdf_load/2,
+    rdf_urdf_load_file/2, 
+    rdf_urdf_load_param/2,
     rdf_urdf_name/2,
     rdf_urdf_robot_joint/2,
     rdf_urdf_robot_link/2,
@@ -54,7 +55,8 @@
 :- use_module('urdf_parser').
 
 :-  rdf_meta
-    rdf_urdf_load(r,+),
+    rdf_urdf_load_file(r,+),
+    rdf_urdf_load_param(r,+),
     rdf_urdf_name(r,?),
     rdf_urdf_robot_joint(r,t),
     rdf_urdf_robot_link(r,t),
@@ -76,12 +78,12 @@
 rdf_urdf_name(Entity,Name) :-
   rdf_has(Entity,urdf:hasURDFName,literal(type(_,Name))).
 
-%% rdf_urdf_joint_origin(?Robot,?Joint) is semidet.
+%% rdf_urdf_robot_joint(?Robot,?Joint) is semidet.
 %
 rdf_urdf_robot_joint(Robot,Joint) :-
   rdf_has(Robot,urdf:hasJoint,Joint).
 
-%% rdf_urdf_joint_origin(?Robot,?Link) is semidet.
+%% rdf_urdf_joint_link(?Robot,?Link) is semidet.
 %
 rdf_urdf_robot_link(Robot,Link) :-
   rdf_has(Robot,urdf:hasLink,Link).
@@ -223,18 +225,29 @@ rdf_urdf_link_inertia(Link,[XX,XY,XZ,YY,YZ,ZZ],[_,RefFrame,Pos,Rot]) :-
 		  *            Loading URDF Files    *
 		  ************************************/
 
-%% rdf_urdf_load(+Robot, +URDF_File) is det.
+%% rdf_urdf_load_file(+Robot, +URDF_File) is det.
 %
 % Load a URDF file and map it into RDF triple store
 % using the model defined in 'urdf.owl'.
 %
-rdf_urdf_load(Robot, URDF_File) :-
+rdf_urdf_load_file(Robot, URDF_File) :-
   rdf_split_url(_, Robot_Id, Robot),
   setup_call_cleanup(
     load_urdf_file(Robot_Id, URDF_File),
     rdf_urdf_load_(Robot, Robot_Id),
     unload_urdf_file(Robot_Id)
   ).
+  
+%% rdf_urdf_load_param(+Robot, +Param) is det.
+%
+% Load a URDF from the param server and map it into RDF triple store
+% using the model defined in 'urdf.owl'.
+%
+rdf_urdf_load_param(Robot, Param) :-
+  rdf_split_url(_, Robot_Id, Robot),
+  load_urdf_file(Robot_Id, Param),
+  rdf_urdf_load_(Robot, Robot_Id).  
+  
   
 rdf_urdf_load_(Robot, Robot_Id) :-
   %%
