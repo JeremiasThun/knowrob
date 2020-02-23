@@ -91,13 +91,13 @@ rdf_urdf_robot_link(Robot,Link) :-
 %% rdf_urdf_joint_origin(?Joint,?Origin) is semidet.
 %
 rdf_urdf_joint_origin(Joint,[_,_,Pos,Rot]) :- % TODO: what is the reference frame?
-  rdf_has(Joint,urdf:hasOrigin,Origin),!,
+  mem_retrieve_triple(Joint,urdf:hasOrigin,Origin),!,
   transform_data(Origin,(Pos,Rot)).
 
 %% rdf_urdf_joint_limits(?Joint,?Pos,?Vel,?Eff) is semidet.
 %
 rdf_urdf_joint_limits(J, [LL,UL], VelMax, EffMax) :-
-  rdf_has(J,urdf:hasJointLimits,Lim),
+  mem_retrieve_triple(J,urdf:hasJointLimits,Lim),
   kb_triple(Lim,urdf:hasLowerLimit,LL),
   kb_triple(Lim,urdf:hasUpperLimit,UL),
   kb_triple(Lim,urdf:hasMaxJointVelocity,VelMax),
@@ -106,7 +106,7 @@ rdf_urdf_joint_limits(J, [LL,UL], VelMax, EffMax) :-
 %% rdf_urdf_joint_soft_limits(?Joint,?Pos,?KP,?KV) is semidet.
 %
 rdf_urdf_joint_soft_limits(J, [LL,UL], KP, KV) :-
-  rdf_has(J,urdf:hasJointSoftLimits,Saf),
+  mem_retrieve_triple(J,urdf:hasJointSoftLimits,Saf),
   kb_triple(Saf,urdf:hasLowerLimit,LL),
   kb_triple(Saf,urdf:hasUpperLimit,UL),
   kb_triple(Saf,urdf:hasKPosition,KP),
@@ -115,26 +115,26 @@ rdf_urdf_joint_soft_limits(J, [LL,UL], KP, KV) :-
 %% rdf_urdf_joint_calibration(?Joint,?FallingEdge,?RisingEdge) is semidet.
 %
 rdf_urdf_joint_calibration(J,Falling,Rising) :-
-  rdf_has(J,urdf:hasJointReferencePositions,Calib),
+  mem_retrieve_triple(J,urdf:hasJointReferencePositions,Calib),
   kb_triple(Calib,urdf:hasRisingEdge,Rising),
   kb_triple(Calib,urdf:hasFallingEdge,Falling).
 
 %% rdf_urdf_joint_axis(?Joint,?Axis) is semidet.
 %
 rdf_urdf_joint_axis(J,[X,Y,Z]) :-
-  rdf_has(J,urdf:hasJointAxis,Axis),
+  mem_retrieve_triple(J,urdf:hasJointAxis,Axis),
   kb_triple(Axis,urdf:hasAxisVector,[X,Y,Z]).
 
 %% rdf_urdf_has_child(?Joint,?Friction) is semidet.
 %
 rdf_urdf_joint_friction(J, Friction) :-
-  rdf_has(J,ease_obj:hasFrictionAttribute,X),
+  mem_retrieve_triple(J,ease_obj:hasFrictionAttribute,X),
   kb_triple(X,ease_obj:hasFrictionValue,Friction).
   
 %% rdf_urdf_has_child(?Joint,?Damping) is semidet.
 %
 rdf_urdf_joint_damping(J, Damping) :-
-  rdf_has(J,urdf:hasDampingAttribute,X),
+  mem_retrieve_triple(J,urdf:hasDampingAttribute,X),
   kb_triple(X,urdf:hasDampingValue,Damping).
 
 %% rdf_urdf_has_child(?Joint,?Link) is semidet.
@@ -148,7 +148,7 @@ rdf_urdf_has_parent(Joint,Link) :-
   rdf_has(Joint,urdf:hasParentLink,Link).
 
 rdf_urdf_origin(Entity,RefFrame,[_,RefFrame,Pos,Rot]) :-
-  rdf_has(Entity,urdf:hasOrigin,Origin),!,
+  mem_retrieve_triple(Entity,urdf:hasOrigin,Origin),!,
   transform_data(Origin,(Pos,Rot)).
 
 rdf_urdf_origin(_Entity,RefFrame,[_,RefFrame,
@@ -184,7 +184,7 @@ mesh_scale_(_Shape, [1.0,1.0,1.0]).
 %% rdf_urdf_link_mass(+Link, ?MassValue) is semidet.
 %
 rdf_urdf_link_mass(Link,MassValue) :-
-  rdf_has(Link,ease_obj:hasMassAttribute,Mass),
+  mem_retrieve_triple(Link,ease_obj:hasMassAttribute,Mass),
   kb_triple(Mass,ease_obj:hasMassValue,MassValue).
 
 %% rdf_urdf_link_visual(+Link, ?ShapeTerm, ?Origin) is semidet.
@@ -208,7 +208,7 @@ rdf_urdf_link_collision(Link,ShapeTerm,Origin) :-
 %% rdf_urdf_link_inertia(+Link, ?Matrix, ?Origin) is semidet.
 %
 rdf_urdf_link_inertia(Link,[XX,XY,XZ,YY,YZ,ZZ],[_,RefFrame,Pos,Rot]) :-
-  rdf_has(Link,urdf:hasInertia,Inertia),
+  mem_retrieve_triple(Link,urdf:hasInertia,Inertia),
   %
   kb_triple(Inertia,urdf:hasInertia_ixx,XX),
   kb_triple(Inertia,urdf:hasInertia_ixy,XY),
@@ -218,7 +218,7 @@ rdf_urdf_link_inertia(Link,[XX,XY,XZ,YY,YZ,ZZ],[_,RefFrame,Pos,Rot]) :-
   kb_triple(Inertia,urdf:hasInertia_izz,ZZ),
   %%
   rdf_urdf_name(Link,RefFrame),
-  rdf_has(Inertia,urdf:hasOrigin,Origin),
+  mem_retrieve_triple(Inertia,urdf:hasOrigin,Origin),
   transform_data(Origin,(Pos,Rot)).
 
 		 /************************************
