@@ -69,9 +69,9 @@ robot_create(RobotType,Robot) :-
   subcomponents_create(Robot,RobotType).
 
 % TODO: handle tf prefixes
-robot_set_tf_prefix(_,_) :- % robot_set_tf_prefix(Robot,TF_prefix) :-
+robot_set_tf_prefix(Robot,TF_prefix) :-
   fail.
-robot_tf_prefix(_,_) :- % robot_tf_prefix(Robot,TF_prefix) :-
+robot_tf_prefix(Robot,TF_prefix) :-
   fail.
 
 %%
