@@ -245,7 +245,7 @@ rdf_urdf_load_file(Robot, URDF_File) :-
 %
 rdf_urdf_load_param(Robot, Param) :-
   rdf_split_url(_, Robot_Id, Robot),
-  load_urdf_param(Robot_Id, Param),
+  load_urdf_file(Robot_Id, Param),
   rdf_urdf_load_(Robot, Robot_Id).  
   
   
