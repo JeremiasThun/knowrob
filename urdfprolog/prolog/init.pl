@@ -1,5 +1,4 @@
 :- register_ros_package(knowrob_common).
-:- register_ros_package(knowrob_memory).
 :- register_ros_package(rosprolog).
 :- register_ros_package(urdfprolog).
 
